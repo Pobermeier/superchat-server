@@ -112,7 +112,7 @@ const io = socketio(server);
 
 io.on('connection', (socket) => {
   const state = {
-    authenticated: false,
+    isAuthenticated: false,
     socketId: null,
     username: null,
   };
@@ -146,7 +146,7 @@ io.on('connection', (socket) => {
         socketId: state.socketId,
       };
 
-      state.authenticated = true;
+      state.isAuthenticated = true;
       socket.emit('connected', {
         status: 'success',
         data: Object.values(activeUsers),
@@ -156,7 +156,7 @@ io.on('connection', (socket) => {
   });
 
   socket.on('disconnect', () => {
-    if (!activeUsers[state.username]) {
+    if (state.isAuthenticated && activeUsers && activeUsers[state.username]) {
       delete activeUsers[state.username];
     }
   });
