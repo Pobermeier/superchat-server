@@ -29,8 +29,8 @@ app.get('/users', (req, res) => {
     res.status(500).json({ status: 'error', msg: 'Internal server error' });
   } else {
     const data = Object.values(activeUsers);
-    res.status(200).json({ status: 'success', data: JSON.stringify(data) });
-    console.log('All active users: ', JSON.stringify(data));
+    res.status(200).json({ status: 'success', data });
+    console.log('All active users: ', JSON.stringify(activeUsers));
   }
 });
 
@@ -64,6 +64,7 @@ app.post('/login', (req, res) => {
   if (!username || !password) {
     res.status(404).json({ status: 'error', msg: 'Invalid data' });
   } else if (
+    !registeredUsers[username] ||
     !registeredUsers[username].username === username ||
     !registeredUsers[username].password === password
   ) {
@@ -73,6 +74,7 @@ app.post('/login', (req, res) => {
   } else if (activeUsers[username]) {
     res.status(404).json({ status: 'error', msg: 'User is already logged-in' });
   } else {
+    activeUsers[username] = {};
     activeUsers[username].username = registeredUsers[username].username;
     activeUsers[username].status = registeredUsers[username].status;
     activeUsers[username].img = registeredUsers[username].img;
@@ -80,7 +82,7 @@ app.post('/login', (req, res) => {
     res
       .status(200)
       .json({ status: 'success', msg: 'You successfully logged-in' });
-    console.log('All active users: ', JSON.stringify(data));
+    console.log('All active users: ', JSON.stringify(activeUsers));
   }
 });
 
@@ -93,11 +95,12 @@ app.delete('/users/:username', (req, res) => {
       msg: 'This id does not correspond to a valid user',
     });
   } else {
+    delete activeUsers[userToDelete];
     res.status(200).json({
       status: 'success',
       msg: 'User successfully removed from active-user list',
     });
-    console.log('All active users: ', JSON.stringify(data));
+    console.log('All active users: ', JSON.stringify(activeUsers));
   }
 });
 
