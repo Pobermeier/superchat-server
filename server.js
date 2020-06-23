@@ -167,6 +167,7 @@ io.on('connection', (socket) => {
   socket.on('disconnect', () => {
     if (state.isAuthenticated && activeUsers && activeUsers[state.username]) {
       delete activeUsers[state.username];
+      socket.broadcast.emit('newConnection', Object.values(activeUsers));
     }
   });
 });
