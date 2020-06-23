@@ -1,24 +1,22 @@
-const fs = require('fs').promises;
+const fs = require('fs');
 const path = require('path');
 
-const loggedInUsers = {};
+const activeUsers = {};
 
-const registeredUsers = {};
+let registeredUsers = {};
 
-const saveRegisteredUsers = async () => {
-  await fs.writeFile(
-    path.join(__dirname, 'registeredUsers.json'),
-    JSON.stringify(registeredUsers),
-  );
+const saveRegisteredUsers = () => {
+  const data = JSON.stringify(registeredUsers, null, 2);
+  fs.writeFileSync(path.join(__dirname, 'registeredUsers.json'), data);
 };
 
-const loadRegisteredUsers = async () => {
-  const data = await fs.readFile(path.join(__dirname, 'registeredUsers.json'));
-  registeredUsers = data;
+const loadRegisteredUsers = () => {
+  const data = fs.readFileSync(path.join(__dirname, 'registeredUsers.json'));
+  registeredUsers = JSON.parse(data);
 };
 
 module.exports = {
-  loggedInUsers,
+  activeUsers,
   registeredUsers,
   saveRegisteredUsers,
   loadRegisteredUsers,
