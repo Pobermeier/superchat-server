@@ -119,7 +119,7 @@ io.on('connection', (socket) => {
 
   console.log('New connection with socket ID: ', socket.id);
 
-  socket.on('login', (username, password) => {
+  socket.on('login', ({ username, password }) => {
     if (!username || !password) {
       socket.emit('error', { status: 'error', msg: 'Invalid data' });
     } else if (
