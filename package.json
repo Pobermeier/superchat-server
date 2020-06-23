@@ -4,8 +4,8 @@
   "description": "The server-side component of the electron-based Superchat-app",
   "main": "server.js",
   "scripts": {
-    "start": "node .",
-    "dev": "nodemon ."
+    "start": "node server",
+    "dev": "nodemon server"
   },
   "repository": {
     "type": "git",
