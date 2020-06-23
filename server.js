@@ -120,18 +120,19 @@ io.on('connection', (socket) => {
   console.log('New connection with socket ID: ', socket.id);
 
   socket.on('login', ({ username, password }) => {
+    console.log('This runs');
     if (!username || !password) {
-      socket.emit('error', { status: 'error', msg: 'Invalid data' });
+      socket.emit('error2', { status: 'error', msg: 'Invalid data' });
     } else if (
       !registeredUsers[username] ||
       !registeredUsers[username].password === password
     ) {
-      socket.emit('error', {
+      socket.emit('error2', {
         status: 'error',
         msg: 'Wrong username or password',
       });
     } else if (activeUsers[username]) {
-      socket.emit('error', {
+      socket.emit('error2', {
         status: 'error',
         msg: 'User is already logged-in',
       });
