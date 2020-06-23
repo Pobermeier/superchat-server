@@ -1,0 +1,21 @@
+{
+  "name": "superchat-server",
+  "version": "1.0.0",
+  "description": "The server-side component of the electron-based Superchat-app",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server",
+    "dev": "nodemon server"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://gitlab.com/wifialex/superchat-server.git"
+  },
+  "keywords": ["node", "node.js", "express", "socket.io", "chat", "server", "backend"],
+  "author": "Patrick Obermeier",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://gitlab.com/wifialex/superchat-server/issues"
+  },
+  "homepage": "https://gitlab.com/wifialex/superchat-server#readme"
+}
