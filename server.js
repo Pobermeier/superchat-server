@@ -30,7 +30,7 @@ app.get('/users', (req, res) => {
   } else {
     const data = Object.values(activeUsers);
     res.status(200).json({ status: 'success', data: JSON.stringify(data) });
-    console.log('All activer users: ', JSON.stringify(data));
+    console.log('All active users: ', JSON.stringify(data));
   }
 });
 
@@ -61,7 +61,9 @@ app.post('/login', (req, res) => {
   const username = req.body.username;
   const password = req.body.password;
 
-  if (
+  if (!username || !password) {
+    res.status(404).json({ status: 'error', msg: 'Invalid data' });
+  } else if (
     !registeredUsers[username].username === username ||
     !registeredUsers[username].password === password
   ) {
@@ -78,7 +80,7 @@ app.post('/login', (req, res) => {
     res
       .status(200)
       .json({ status: 'success', msg: 'You successfully logged-in' });
-    console.log('All activer users: ', JSON.stringify(data));
+    console.log('All active users: ', JSON.stringify(data));
   }
 });
 
@@ -95,7 +97,7 @@ app.delete('/users/:username', (req, res) => {
       status: 'success',
       msg: 'User successfully removed from active-user list',
     });
-    console.log('All activer users: ', JSON.stringify(data));
+    console.log('All active users: ', JSON.stringify(data));
   }
 });
 
