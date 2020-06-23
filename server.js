@@ -22,7 +22,6 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
 // ROUTES
-
 // Get active users
 app.get('/users', (req, res) => {
   if (!activeUsers) {
@@ -65,7 +64,6 @@ app.post('/login', (req, res) => {
     res.status(404).json({ status: 'error', msg: 'Invalid data' });
   } else if (
     !registeredUsers[username] ||
-    !registeredUsers[username].username === username ||
     !registeredUsers[username].password === password
   ) {
     res
@@ -106,8 +104,62 @@ app.delete('/users/:username', (req, res) => {
 
 app.use(express.static(path.resolve(__dirname, 'wwwroot')));
 
-app.listen(PORT, () => {
+const server = app.listen(PORT, () => {
   console.log('App listening on port ' + PORT);
+});
+
+const io = socketio(server);
+
+io.on('connection', (socket) => {
+  const state = {
+    authenticated: false,
+    socketId: null,
+    username: null,
+  };
+
+  console.log('New connection with socket ID: ', socket.id);
+
+  socket.on('login', (username, password) => {
+    if (!username || !password) {
+      socket.emit('error', { status: 'error', msg: 'Invalid data' });
+    } else if (
+      !registeredUsers[username] ||
+      !registeredUsers[username].password === password
+    ) {
+      socket.emit('error', {
+        status: 'error',
+        msg: 'Wrong username or password',
+      });
+    } else if (activeUsers[username]) {
+      socket.emit('error', {
+        status: 'error',
+        msg: 'User is already logged-in',
+      });
+    } else {
+      state.socketId = socket.id;
+      state.username = username;
+
+      activeUsers[state.username] = {
+        username: registeredUsers[state.username].username,
+        status: registeredUsers[state.username].status,
+        img: registeredUsers[state.username].img,
+        socketId: state.socketId,
+      };
+
+      state.authenticated = true;
+      socket.emit('connected', {
+        status: 'success',
+        data: Object.values(activeUsers),
+      });
+      socket.broadcast.emit('newConnection', Object.values(activeUsers));
+    }
+  });
+
+  socket.on('disconnect', () => {
+    if (!activeUsers[state.username]) {
+      delete activeUsers[state.username];
+    }
+  });
 });
 
 process.on('SIGINT', () => {
