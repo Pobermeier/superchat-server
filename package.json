@@ -11,11 +11,22 @@
     "type": "git",
     "url": "git+https://gitlab.com/wifialex/superchat-server.git"
   },
-  "keywords": ["node", "node.js", "express", "socket.io", "chat", "server", "backend"],
+  "keywords": [
+    "node",
+    "node.js",
+    "express",
+    "socket.io",
+    "chat",
+    "server",
+    "backend"
+  ],
   "author": "Patrick Obermeier",
   "license": "MIT",
   "bugs": {
     "url": "https://gitlab.com/wifialex/superchat-server/issues"
   },
-  "homepage": "https://gitlab.com/wifialex/superchat-server#readme"
+  "homepage": "https://gitlab.com/wifialex/superchat-server#readme",
+  "devDependencies": {
+    "nodemon": "^2.0.4"
+  }
 }
