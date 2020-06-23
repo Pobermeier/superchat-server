@@ -155,6 +155,14 @@ io.on('connection', (socket) => {
     }
   });
 
+  socket.on('message', ({ otherSocketId, message }) => {
+    if (isAuthenticated && state.socketId) {
+      socket.broadcast
+        .to(otherSocketId)
+        .emit('message', { socketId: state.socketId, message: message });
+    }
+  });
+
   socket.on('disconnect', () => {
     if (state.isAuthenticated && activeUsers && activeUsers[state.username]) {
       delete activeUsers[state.username];
